@@ -4,6 +4,8 @@ from werkzeug.utils import secure_filename
 import image_processing
 import os
 import traceback
+import logging
+logging.basicConfig(filename='output.log', encoding='utf-8', level=logging.INFO)
 
 flask = Flask(__name__)
 
