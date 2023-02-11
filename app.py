@@ -9,7 +9,7 @@ flask = Flask(__name__)
 
 UPLOAD_FOLDER = '/home/ubuntu/smart-crop/uploads'
 PROCESSED_FOLDER = '/home/ubuntu/smart-crop/processed'
-BACKGROUNDS_FOLDER = 'backgrounds'
+BACKGROUNDS_FOLDER = '/home/ubuntu/smart-crop/backgrounds'
 
 
 @flask.route('/submit', methods=['POST'])
