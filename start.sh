@@ -17,7 +17,7 @@ fi
 # Name of the subdirectory
 if [[ -z "${clone_dir}" ]]
 then
-    clone_dir="automatic-image-processing"
+    clone_dir="smart-crop"
 fi
 
 # python3 executable
@@ -118,7 +118,6 @@ else
 fi
 
 if [[ "$first_launch" -eq 1 ]]; then
-  "${pip_cmd}" install -e git+https://github.com/pharmapsychotic/BLIP.git@lib#egg=blip
   "${pip_cmd}" install -r requirements.txt
 fi
 
