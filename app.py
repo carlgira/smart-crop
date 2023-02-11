@@ -6,6 +6,7 @@ import os
 import traceback
 import logging
 logging.basicConfig(filename='output.log', encoding='utf-8', level=logging.INFO)
+logging.info('Starting app')
 
 flask = Flask(__name__)
 
