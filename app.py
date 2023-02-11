@@ -49,7 +49,7 @@ def submit():
                     return jsonify(message='Zip contains other files than, png, jpg or jpeg', category="error", status=500)
 
         except Exception as e:
-            traceback.print_exc()
+            logging.error(traceback.format_exc())
             return jsonify(message='An error occurred processing the zip file', category="error", status=500)
 
         subprocess.run(["rm", "-rf", UPLOAD_FOLDER + '/' + filename])
