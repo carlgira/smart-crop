@@ -3,15 +3,12 @@ import subprocess
 from werkzeug.utils import secure_filename
 import image_processing
 import os
-import traceback
-import logging
-logging.basicConfig(filename='output.log', encoding='utf-8', level=logging.INFO)
-logging.info('Starting app')
+
 
 flask = Flask(__name__)
 
-UPLOAD_FOLDER = 'uploads'
-PROCESSED_FOLDER = 'processed'
+UPLOAD_FOLDER = '/home/ubuntu/smart-crop/uploads'
+PROCESSED_FOLDER = '/home/ubuntu/smart-crop/processed'
 BACKGROUNDS_FOLDER = 'backgrounds'
 
 
@@ -50,7 +47,6 @@ def submit():
                     return jsonify(message='Zip contains other files than, png, jpg or jpeg', category="error", status=500)
 
         except Exception as e:
-            logging.error(traceback.format_exc())
             return jsonify(message='An error occurred processing the zip file', category="error", status=500)
 
         subprocess.run(["rm", "-rf", UPLOAD_FOLDER + '/' + filename])
@@ -67,7 +63,7 @@ def submit():
 
         zip_file = PROCESSED_FOLDER + '/' + instance_name + '/' + instance_name + '.zip'
         zip_files = PROCESSED_FOLDER + '/' + instance_name + '/*'
-        subprocess.getoutput("zip -j {ZIP_FILE} {ZIP_FILES}".format(ZIP_FILE=zip_file , ZIP_FILES=zip_files))
+        subprocess.getoutput("zip -j {ZIP_FILE} {ZIP_FILES}".format(ZIP_FILE=zip_file, ZIP_FILES=zip_files))
 
         return send_file(zip_file)
 
