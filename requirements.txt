@@ -1,0 +1,9 @@
+opencv_python
+sahi
+torch
+ultralytics==8.0.4
+ultralyticsplus==0.0.3
+Pillow
+tensorflow-macos; sys_platform == 'darwin'
+tensorflow; sys_platform != 'darwin'
+Flask==2.2.2
