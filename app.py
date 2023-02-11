@@ -3,6 +3,7 @@ import subprocess
 from werkzeug.utils import secure_filename
 import image_processing
 import os
+import traceback
 
 flask = Flask(__name__)
 
@@ -43,6 +44,7 @@ def submit():
                     continue
 
                 if not file.lower().endswith(('.png', '.jpg', '.jpeg')):
+                    traceback.print_exc()
                     return jsonify(message='Zip contains other files than, png, jpg or jpeg', category="error", status=500)
 
         except Exception as e:
