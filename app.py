@@ -7,9 +7,9 @@ import os
 
 flask = Flask(__name__)
 
-UPLOAD_FOLDER = '/home/ubuntu/smart-crop/uploads'
-PROCESSED_FOLDER = '/home/ubuntu/smart-crop/processed'
-BACKGROUNDS_FOLDER = '/home/ubuntu/smart-crop/backgrounds'
+UPLOAD_FOLDER = os.environ['UPLOAD_FOLDER']
+PROCESSED_FOLDER = os.environ['PROCESSED_FOLDER']
+BACKGROUNDS_FOLDER = os.environ['BACKGROUNDS_FOLDER']
 
 
 @flask.route('/submit', methods=['POST'])
@@ -57,8 +57,9 @@ def submit():
             file_path = UPLOAD_FOLDER + '/' + instance_name + '/' + file
 
             result = image_processing.process_image(file_path, BACKGROUNDS_FOLDER + '/bck' + str(i % 20) + '.png')
-            result.save(PROCESSED_FOLDER + '/' + instance_name + '/' + str(i) + '.png')
-
+            image_file_name = PROCESSED_FOLDER + '/' + instance_name + '/' + str(i) + '.png'
+            with open(image_file_name, 'wb') as f:
+                result.save(f)
 
         zip_file = PROCESSED_FOLDER + '/' + instance_name + '/' + instance_name + '.zip'
         zip_files = PROCESSED_FOLDER + '/' + instance_name + '/*'

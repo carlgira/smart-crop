@@ -124,6 +124,10 @@ fi
 # locate the bin folder of the venv
 export venv_bin_dir=$(dirname "$(command -v python)")
 
+export UPLOAD_FOLDER=/home/ubuntu/smart-crop/uploads
+export PROCESSED_FOLDER=/home/ubuntu/smart-crop/processed
+export BACKGROUNDS_FOLDER=/home/ubuntu/smart-crop/backgrounds
+
 printf "\n%s\n" "${delimiter}"
 printf "Launching app.py..."
 printf "\n%s\n" "${delimiter}"
