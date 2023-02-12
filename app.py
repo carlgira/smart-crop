@@ -55,11 +55,14 @@ def submit():
 
         for i, file in enumerate(os.listdir(UPLOAD_FOLDER + '/' + instance_name)):
             file_path = UPLOAD_FOLDER + '/' + instance_name + '/' + file
-
-            result = image_processing.process_image(file_path, BACKGROUNDS_FOLDER + '/bck' + str(i % 20) + '.png')
-            image_file_name = PROCESSED_FOLDER + '/' + instance_name + '/' + str(i) + '.png'
-            with open(image_file_name, 'wb') as f:
-                result.save(f)
+            try:
+                result = image_processing.process_image(file_path, BACKGROUNDS_FOLDER + '/bck' + str(i % 20) + '.png')
+                image_file_name = PROCESSED_FOLDER + '/' + instance_name + '/' + str(i) + '.png'
+                if result is not None:
+                    with open(image_file_name, 'wb') as f:
+                        result.save(f)
+            except Exception as e:
+                continue
 
         zip_file = PROCESSED_FOLDER + '/' + instance_name + '/' + instance_name + '.zip'
         zip_files = PROCESSED_FOLDER + '/' + instance_name + '/*'
