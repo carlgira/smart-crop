@@ -1,8 +1,10 @@
+import os
+os.environ['CUDA_VISIBLE_DEVICES'] = '-1' #Force to use CPU
+
 from flask import Flask, render_template, request, redirect, url_for, send_file, jsonify
 import subprocess
 from werkzeug.utils import secure_filename
 import image_processing
-import os
 
 
 flask = Flask(__name__)
