@@ -1,4 +1,4 @@
-from PIL import Image, ExifTags
+from PIL import Image, ExifTags, ImageOps
 from sahi.prediction import ObjectPrediction
 from sahi.utils.cv import visualize_object_predictions, read_image
 from ultralyticsplus import YOLO
@@ -11,10 +11,6 @@ import clustering
 model_segmentation = from_pretrained_keras("keras-io/deeplabv3p-resnet50")
 model_yolo = YOLO('kadirnar/yolov8m-v8.0')
 
-orientation = None
-for orientation in ExifTags.TAGS.keys():
-    if ExifTags.TAGS[orientation] == 'Orientation':
-        break
 
 def yolov8_inference(image, image_size=512, conf_threshold=0.50, iou_threshold=0.45):
     """
@@ -110,22 +106,54 @@ def segmentation(input_image):
     return (overlay, prediction_colormap)
 
 
+def exif_transpose(img):
+    if not img:
+        return img
+
+    exif_orientation_tag = 274
+
+    # Check for EXIF data (only present on some files)
+    if hasattr(img, "_getexif") and isinstance(img._getexif(), dict) and exif_orientation_tag in img._getexif():
+        exif_data = img._getexif()
+        orientation = exif_data[exif_orientation_tag]
+
+        # Handle EXIF Orientation
+        if orientation == 1:
+            # Normal image - nothing to do!
+            pass
+        elif orientation == 2:
+            # Mirrored left to right
+            img = img.transpose(Image.FLIP_LEFT_RIGHT)
+        elif orientation == 3:
+            # Rotated 180 degrees
+            img = img.rotate(180)
+        elif orientation == 4:
+            # Mirrored top to bottom
+            img = img.rotate(180).transpose(Image.FLIP_LEFT_RIGHT)
+        elif orientation == 5:
+            # Mirrored along top-left diagonal
+            img = img.rotate(-90, expand=True).transpose(Image.FLIP_LEFT_RIGHT)
+        elif orientation == 6:
+            # Rotated 90 degrees
+            img = img.rotate(-90, expand=True)
+        elif orientation == 7:
+            # Mirrored along top-right diagonal
+            img = img.rotate(90, expand=True).transpose(Image.FLIP_LEFT_RIGHT)
+        elif orientation == 8:
+            # Rotated 270 degrees
+            img = img.rotate(90, expand=True)
+
+    return img
+
+
 def check_orientation(filepath):
     try:
         image = Image.open(filepath)
-        exif = image._getexif()
-
-        if exif[orientation] == 3:
-            image = image.rotate(180, expand=True)
-        elif exif[orientation] == 6:
-            image = image.rotate(270, expand=True)
-        elif exif[orientation] == 8:
-            image = image.rotate(90, expand=True)
-
-        image.save(filepath)
-        image.close()
+        t_image = exif_transpose(image)
+        t_image.save(filepath)
     except:
         pass
+
 
 def process_image(image, background):
     predictions = []
@@ -178,3 +206,17 @@ def process_image(image, background):
     proc_img.paste(final_image, (int((image_size - width) / 2), int((image_size - height) / 2)))
 
     return proc_img
+
+BACKGROUNDS_FOLDER = 'backgrounds'
+wi = 'bucket/sergio.pardo@oracle.com/2E372EE0-6710-4910-873F-03D986D45192.jpeg'
+
+
+check_orientation(wi)
+
+'''
+result = process_image('bucket/sergio.pardo@oracle.com/2E372EE0-6710-4910-873F-03D986D45192.jpeg', BACKGROUNDS_FOLDER + '/bck' + str(1 % 20) + '.png')
+image_file_name = 'result.png'
+if result is not None:
+    with open(image_file_name, 'wb') as f:
+        result.save(f)
+'''
