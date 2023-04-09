@@ -47,7 +47,7 @@ fi
 # Disable sentry logging
 export ERROR_REPORTING=FALSE
 
-# Do not reinstall existing pip packages on Debian/Ubuntu
+# Do not reinstall existing pip packages
 export PIP_IGNORE_INSTALLED=0
 
 # Pretty print
@@ -124,9 +124,9 @@ fi
 # locate the bin folder of the venv
 export venv_bin_dir=$(dirname "$(command -v python)")
 
-export UPLOAD_FOLDER=/home/ubuntu/smart-crop/uploads
-export PROCESSED_FOLDER=/home/ubuntu/smart-crop/processed
-export BACKGROUNDS_FOLDER=/home/ubuntu/smart-crop/backgrounds
+export UPLOAD_FOLDER=/home/$USER/smart-crop/uploads
+export PROCESSED_FOLDER=/home/$USER/smart-crop/processed
+export BACKGROUNDS_FOLDER=/home/$USER/smart-crop/backgrounds
 
 printf "\n%s\n" "${delimiter}"
 printf "Launching app.py..."
