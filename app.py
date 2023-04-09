@@ -1,4 +1,5 @@
 import os
+import traceback
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1' #Force to use CPU
 
 from flask import Flask, render_template, request, redirect, url_for, send_file, jsonify
@@ -29,6 +30,7 @@ def submit():
         try:
             file.save(os.path.join(UPLOAD_FOLDER, filename))
         except:
+            traceback.print_exc()
             return jsonify(message='The zip file could not be saved', category="error", status=500)
 
         try:
